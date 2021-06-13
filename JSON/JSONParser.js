@@ -2,7 +2,7 @@
  * @Author: chenhao25
  * @Date: 2021-06-12 10:59:29
  * @LastEditors: chenhao25
- * @LastEditTime: 2021-06-12 12:40:58
+ * @LastEditTime: 2021-06-13 11:29:13
  * @FilePath: /CHXToyParser/JSON/JSONParser.js
  * Code: https://codesandbox.io/s/json-parser-with-error-handling-hjwxk?from-embed=&file=/src/index.js
  * EN-Blog: https://lihautan.com/json-parser-with-javascript/
@@ -17,17 +17,13 @@ function ToyJSONParser(str) {
     //      ┌─┐     ┌──────────┐               ┌─┐
     // ─────┤{├──┬──┤whitespace├─────────────┬─┤}├─►
     //      └─┘  │  └──────────┘             │ └─┘
-    //           │                           │
     //      ┌─┐  │  ┌──────────┐ ┌──────┐    │
     //   ┌──┤,├──┴──┤whitespase├─┤string├──┐ │
     //   │  └─┘     └──────────┘ └──────┘  │ │
-    //   │                                 │ │
     //   │  ┌──────────────────────────────┘ │
-    //   │  │                                │
     //   │  │ ┌──────────┐  ┌─┐   ┌─────┐    │
     //   │  └─┤whitespace├──┤;├───┤value├────┤
     //   │    └──────────┘  └─┘   └─────┘    │
-    //   │                                   │
     //   └───────────────────────────────────┘
     function parseObject() {
         if (str[i] === '{') {
@@ -65,6 +61,21 @@ function ToyJSONParser(str) {
         }
     }
 
+    // Array
+    // https://www.json.org/img/array.png
+    //     +---+        +------------+       +---+
+    //     |   |        |            |       |   |
+    // ----+ [ +---+----+ whitespace +-----+-+ ] +-->
+    //     |   |   |    |            |     | |   |
+    //     +---+   |    +------------+     | +---+
+    //             |                       |
+    //     +---+   |        +-----+        |
+    //     |   |   |        |     |        |
+    //   +-+ , +---+--------+value+--------+
+    //   | |   |            |     |        |
+    //   | +---+            +-----+        |
+    //   |                                 |
+    //   +---------------------------------+
     function parseArray() {
         if (str[i] === '[') {
             i++;
@@ -91,6 +102,29 @@ function ToyJSONParser(str) {
         }
     }
 
+    // Value
+    // https://www.json.org/img/value.png
+    //      ┌──────────────┐        ┌────────────┐       ┌─────────────┐
+    // ─────┤  whitespace  ├───┬────┤   string   ├─────┬─┤ whitespace  ├─────►
+    //      └──────────────┘   │    └────────────┘     │ └─────────────┘
+    //                         │    ┌────────────┐     │
+    //                         ├────┤   number   ├─────┤
+    //                         │    └────────────┘     │
+    //                         │    ┌────────────┐     │
+    //                         ├────┤   object   ├─────┤
+    //                         │    └────────────┘     │
+    //                         │    ┌────────────┐     │
+    //                         ├────┤   array    ├─────┤
+    //                         │    └────────────┘     │
+    //                         │    ┌────────────┐     │
+    //                         ├────┤    true    ├─────┤
+    //                         │    └────────────┘     │
+    //                         │    ┌────────────┐     │
+    //                         ├────┤    false   ├─────┤
+    //                         │    └────────────┘     │
+    //                         │    ┌────────────┐     │
+    //                         └────┤    null    ├─────┘
+    //                              └────────────┘
     function parseValue() {
         skipWhitespace();
 
